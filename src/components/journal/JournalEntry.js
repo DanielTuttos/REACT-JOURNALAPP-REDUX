@@ -1,27 +1,52 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { activeNote } from '../../actions/notesAction';
 
-export const JournalEntry = () => {
+export const JournalEntry = ({ id, date, title, body, url }) => {
+
+    const dispatch = useDispatch();
+
+    const noteDate = moment(date);
+
+    const note = {
+        date,
+        title,
+        body,
+        url
+    } 
+
+    const handleEntryClick=()=>{
+        dispatch(activeNote(id, note))
+    }
+
     return (
-        <div className="journal__entry pointer">
-            <div
-                className="journal__entry-picture"
-                style={{
-                    backgroundSize: 'cover',
-                    backgroundImage: 'url(https://ep01.epimg.net/elpais/imagenes/2019/10/30/album/1572424649_614672_1572453030_noticia_normal.jpg)'
-                }}></div>
+        <div 
+        className="journal__entry pointer animate__animated animate__fadeInLeft"
+        onClick={handleEntryClick}
+        >
+            {
+                url &&
+                <div
+                    className="journal__entry-picture"
+                    style={{
+                        backgroundSize: 'cover',
+                        backgroundImage: `url(${url})`
+                    }}></div>
+            }
 
             <div className="journal__entry-body">
                 <p className="journal__entry-title">
-                    un titulo
+                    {title}
                 </p>
                 <p className="journal__entry-content">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, fuga.
+                    {body}
                 </p>
             </div>
 
             <div className="journal__entry-date-box">
-                <span>Monday</span>
-                <h4>28</h4>
+                <span>{noteDate.format("dddd")}</span>
+                <h4>{noteDate.format("Do")}</h4>
             </div>
 
         </div>
